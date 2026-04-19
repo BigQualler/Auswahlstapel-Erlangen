@@ -9,4 +9,6 @@ Dieses Addon soll euch helfen schneller und einfacher Auswahlstapel passend zur 
 
 </div>
 In der Config des Addons könnt ihr die Tags (=Schlagwörter) anklicken, welche im eigentlichen Fenster gezeigt werden sollen.
-<img src="screenshots/Addon_Bild_3.jpg" width="44%">
+<div class="container">
+  <img src="screenshots/Addon_Bild_3.jpg" alt="Beispiel">
+</div>
