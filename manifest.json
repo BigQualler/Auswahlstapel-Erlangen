@@ -1,6 +1,8 @@
 {
     "name": "Auswahlstapel Erlangen",
-    "mod": 0,
+    "package": "auswahlstapel_erlangen",
+    "conf": "config.json",
+    "mod": 1713512345,
     "min_point_version": 231000,
     "max_point_version": 999999
 }
