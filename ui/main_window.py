@@ -142,7 +142,7 @@ class SelectionWindow(QDialog):
 
         self.filter1_due = QCheckBox("Fällige Karten (is:due)")
         self.filter1_new = QCheckBox("Neue Karten (is:new)")
-        self.filter1_resched_cb = QCheckBox("Reschedule beim Rebuild")
+        self.filter1_resched_cb = QCheckBox("Neu planen (reschedule)")
 
         layout.addWidget(self.filter1_due)
         layout.addWidget(self.filter1_new)
@@ -164,6 +164,24 @@ class SelectionWindow(QDialog):
         self.filter1_limit.setMaximum(9999)
         self.filter1_limit.setValue(100)
         layout.addWidget(self.filter1_limit)
+
+        layout.addSpacing(6)
+        layout.addWidget(QLabel("Sortierung der Karten:"))
+        self.filter1_sort = QComboBox()
+        # Die Reihenfolge hier entspricht: Index 0, 1, 2, 3
+        self.filter1_sort.addItems([
+            "Älteste zuerst", 
+            "Zufällig", 
+            "Aufsteigende Intervalle", 
+            "Absteigende Intervalle",
+            "Fehlerzahl (häufigste zuerst)",
+            "Erstelldatum (älteste zuerst)",
+            "Fälligkeit",
+            "Erstelldatum (neueste zuerst)",
+            "Aufsteigende Abrufbarkeit",
+            "Absteigende Abrufbarkeit"
+        ])
+        layout.addWidget(self.filter1_sort)
 
         layout.addStretch()
         return widget
@@ -189,7 +207,7 @@ class SelectionWindow(QDialog):
 
         self.filter2_due = QCheckBox("Fällige Karten (is:due)")
         self.filter2_new = QCheckBox("Neue Karten (is:new)")
-        self.filter2_resched_cb = QCheckBox("Reschedule beim Rebuild")
+        self.filter2_resched_cb = QCheckBox("Neu planen (reschedule)")
 
         layout.addWidget(self.filter2_due)
         layout.addWidget(self.filter2_new)
@@ -211,6 +229,24 @@ class SelectionWindow(QDialog):
         self.filter2_limit.setMaximum(9999)
         self.filter2_limit.setValue(100)
         layout.addWidget(self.filter2_limit)
+
+        layout.addSpacing(6)
+        layout.addWidget(QLabel("Sortierung der Karten:"))
+        self.filter1_sort = QComboBox()
+        # Die Reihenfolge hier entspricht: Index 0, 1, 2, 3
+        self.filter1_sort.addItems([
+            "Älteste zuerst", 
+            "Zufällig", 
+            "Aufsteigende Intervalle", 
+            "Absteigende Intervalle",
+            "Fehlerzahl (häufigste zuerst)",
+            "Erstelldatum (älteste zuerst)",
+            "Fälligkeit",
+            "Erstelldatum (neueste zuerst)",
+            "Aufsteigende Abrufbarkeit",
+            "Absteigende Abrufbarkeit"
+        ])
+        layout.addWidget(self.filter1_sort)
 
         layout.addStretch()
         return widget
@@ -371,7 +407,21 @@ class SelectionWindow(QDialog):
     # -----------------------
 
     def create_filtered_deck(self):
-
+        # 1. Mapping definieren: Index in der ComboBox -> Anki Sortier-ID
+        # Die Reihenfolge hier muss exakt der Reihenfolge in deiner .addItems() entsprechen!
+        sort_map = {
+            0: 0, # Älteste zuerst
+            1: 1, # Zufällig
+            2: 2, # Aufsteigende Intervalle
+            3: 3, # Absteigende Intervalle
+            4: 4, # Fehlerzahl (häufigste zuerst)
+            5: 5, # Erstelldatum (älteste zuerst)
+            6: 6, # Fälligkeit
+            7: 7, # Erstelldatum (neueste zuerst)
+            8: 8, # Aufsteigende Abrufbarkeit
+            9: 9  # Absteigende Abrufbarkeit
+        }
+        
         deck_name = self.name_input.text().strip()
         if not deck_name:
             deck_name = "Erlangen Auswahlstapel"
@@ -395,7 +445,8 @@ class SelectionWindow(QDialog):
             search_query1 += " is:new"
 
         limit1 = self.filter1_limit.value()
-
+        # Sortierung für Term 1 auslesen
+        sort_id1 = sort_map.get(self.filter1_sort.currentIndex(), 1) # Standard Zufall (1)
 
         # =========================
         # TERM 2
@@ -416,6 +467,8 @@ class SelectionWindow(QDialog):
             search_query2 += " is:new"
 
         limit2 = self.filter2_limit.value()
+        # Sortierung für Term 2 auslesen
+        sort_id2 = sort_map.get(self.filter2_sort.currentIndex(), 1)
 
 
         # =========================
@@ -433,10 +486,10 @@ class SelectionWindow(QDialog):
         terms = []
 
         if search_query1.strip():
-            terms.append([search_query1.strip(), limit1, 0])
+            terms.append([search_query1.strip(), limit1, sort_id1])
 
         if search_query2.strip():
-            terms.append([search_query2.strip(), limit2, 0])
+            terms.append([search_query2.strip(), limit2, sort_id2])
 
         if not terms:
             return  # nichts ausgewählt
