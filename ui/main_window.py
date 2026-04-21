@@ -181,6 +181,9 @@ class SelectionWindow(QDialog):
             "Aufsteigende Abrufbarkeit",
             "Absteigende Abrufbarkeit"
         ])
+        # HIER: Standardmäßig auf "Zufällig" setzen
+        self.filter1_sort.setCurrentIndex(1)
+        
         layout.addWidget(self.filter1_sort)
 
         layout.addStretch()
@@ -232,9 +235,9 @@ class SelectionWindow(QDialog):
 
         layout.addSpacing(6)
         layout.addWidget(QLabel("Sortierung der Karten:"))
-        self.filter1_sort = QComboBox()
+        self.filter2_sort = QComboBox()
         # Die Reihenfolge hier entspricht: Index 0, 1, 2, 3
-        self.filter1_sort.addItems([
+        self.filter2_sort.addItems([
             "Älteste zuerst", 
             "Zufällig", 
             "Aufsteigende Intervalle", 
@@ -246,7 +249,10 @@ class SelectionWindow(QDialog):
             "Aufsteigende Abrufbarkeit",
             "Absteigende Abrufbarkeit"
         ])
-        layout.addWidget(self.filter1_sort)
+        # HIER: Standardmäßig auf "Zufällig" setzen
+        self.filter2_sort.setCurrentIndex(1)
+        
+        layout.addWidget(self.filter2_sort)
 
         layout.addStretch()
         return widget
