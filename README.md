@@ -12,3 +12,4 @@ In der Config des Addons könnt ihr die Tags (=Schlagwörter) anklicken, welche 
 <p align="center">
   <img src="screenshots/Addon_Bild_3.jpg" width="500">
 </p>
+![Mein Bild](screenshots/Addon_Bild_2.jpg?v=2)
